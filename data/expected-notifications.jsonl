@@ -1,0 +1,8 @@
+{"at":"2026-05-26T09:35:00Z","rule_id":"billing-sla","subject_kind":"queue","subject_id":"billing","kind":"open","audience":"support-operations"}
+{"at":"2026-05-26T09:45:00Z","rule_id":"adherence-10m","subject_kind":"agent","subject_id":"a_19","kind":"open","audience":"support-operations"}
+{"at":"2026-05-26T10:10:00Z","rule_id":"adherence-10m","subject_kind":"agent","subject_id":"a_88","kind":"open","audience":"support-operations"}
+{"at":"2026-05-26T10:10:30Z","rule_id":"adherence-10m","subject_kind":"agent","subject_id":"a_19","kind":"recovery","audience":"support-operations"}
+{"at":"2026-05-26T10:15:00Z","rule_id":"long-call-45m","subject_kind":"agent","subject_id":"a_31","kind":"open","audience":"support-operations"}
+{"at":"2026-05-26T10:15:00Z","rule_id":"billing-sla","subject_kind":"queue","subject_id":"billing","kind":"recovery","audience":"support-operations"}
+{"at":"2026-05-26T10:25:00Z","rule_id":"long-call-45m","subject_kind":"agent","subject_id":"a_31","kind":"recovery","audience":"support-operations"}
+{"at":"2026-05-26T10:25:30Z","rule_id":"adherence-10m","subject_kind":"agent","subject_id":"a_23","kind":"open","audience":"support-operations"}

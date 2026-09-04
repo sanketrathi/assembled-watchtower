@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "name": "adherence-10m",
+  "targets": {
+    "kind": "agent",
+    "ids": [
+      "a_19",
+      "a_88",
+      "a_23"
+    ],
+    "group_ids": []
+  },
+  "trigger": {
+    "predicate": {
+      "kind": "compare",
+      "left": {
+        "kind": "field",
+        "name": "adherence.violation"
+      },
+      "op": "eq",
+      "right": {
+        "kind": "boolean",
+        "value": true
+      }
+    },
+    "for": "10m"
+  },
+  "clear": {
+    "predicate": {
+      "kind": "compare",
+      "left": {
+        "kind": "field",
+        "name": "adherence.violation"
+      },
+      "op": "eq",
+      "right": {
+        "kind": "boolean",
+        "value": false
+      }
+    },
+    "for": "0s"
+  },
+  "notifications": {
+    "on_open": true,
+    "on_recovery": true,
+    "audience": "support-operations"
+  }
+}

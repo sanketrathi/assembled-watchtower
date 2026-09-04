@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-watchtower}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-watchtower}
+      POSTGRES_DB: ${POSTGRES_DB:-watchtower}
+    ports:
+      - "${WATCHTOWER_POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  migrate:
+    build: .
+    command: ["migrate"]
+    environment:
+      WATCHTOWER_DATABASE_URL: postgres://${POSTGRES_USER:-watchtower}:${POSTGRES_PASSWORD:-watchtower}@postgres:5432/${POSTGRES_DB:-watchtower}?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  watchtower:
+    build: .
+    command: ["serve", "--listen-addr", ":8080"]
+    environment:
+      WATCHTOWER_DATABASE_URL: postgres://${POSTGRES_USER:-watchtower}:${POSTGRES_PASSWORD:-watchtower}@postgres:5432/${POSTGRES_DB:-watchtower}?sslmode=disable
+      WATCHTOWER_REPLAY_FILE: /data/events.jsonl
+    ports:
+      - "${WATCHTOWER_HTTP_PORT:-8080}:8080"
+    volumes:
+      - ./data/events.jsonl:/data/events.jsonl:ro
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  replay:
+    profiles: ["demo"]
+    build: .
+    command: ["replay", "--input", "/data/events.jsonl", "--rules", "/data/rules.json"]
+    environment:
+      WATCHTOWER_DATABASE_URL: postgres://${POSTGRES_USER:-watchtower}:${POSTGRES_PASSWORD:-watchtower}@postgres:5432/${POSTGRES_DB:-watchtower}?sslmode=disable
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - ./data/events.jsonl:/data/events.jsonl:ro
+      - ./data/demo-rules.json:/data/rules.json:ro
+
+volumes:
+  postgres-data:

@@ -1,0 +1,154 @@
+[
+  {
+    "id": "billing-sla",
+    "revision": 1,
+    "definition": {
+      "schema_version": 1,
+      "name": "billing-sla",
+      "targets": {
+        "kind": "queue",
+        "ids": [
+          "billing"
+        ],
+        "group_ids": []
+      },
+      "trigger": {
+        "predicate": {
+          "kind": "compare",
+          "left": {
+            "kind": "field",
+            "name": "queue.longest_wait"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "field",
+            "name": "queue.sla_target"
+          }
+        },
+        "for": "5m"
+      },
+      "clear": {
+        "predicate": {
+          "kind": "compare",
+          "left": {
+            "kind": "field",
+            "name": "queue.longest_wait"
+          },
+          "op": "lte",
+          "right": {
+            "kind": "field",
+            "name": "queue.sla_target"
+          }
+        },
+        "for": "0s"
+      },
+      "notifications": {
+        "on_open": true,
+        "on_recovery": true,
+        "audience": "support-operations"
+      }
+    }
+  },
+  {
+    "id": "adherence-10m",
+    "revision": 1,
+    "definition": {
+      "schema_version": 1,
+      "name": "adherence-10m",
+      "targets": {
+        "kind": "agent",
+        "ids": [
+          "a_19",
+          "a_88",
+          "a_23"
+        ],
+        "group_ids": []
+      },
+      "trigger": {
+        "predicate": {
+          "kind": "compare",
+          "left": {
+            "kind": "field",
+            "name": "adherence.violation"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "boolean",
+            "value": true
+          }
+        },
+        "for": "10m"
+      },
+      "clear": {
+        "predicate": {
+          "kind": "compare",
+          "left": {
+            "kind": "field",
+            "name": "adherence.violation"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "boolean",
+            "value": false
+          }
+        },
+        "for": "0s"
+      },
+      "notifications": {
+        "on_open": true,
+        "on_recovery": true,
+        "audience": "support-operations"
+      }
+    }
+  },
+  {
+    "id": "long-call-45m",
+    "revision": 1,
+    "definition": {
+      "schema_version": 1,
+      "name": "long-call-45m",
+      "targets": {
+        "kind": "agent",
+        "ids": [
+          "a_31"
+        ],
+        "group_ids": []
+      },
+      "trigger": {
+        "predicate": {
+          "kind": "compare",
+          "left": {
+            "kind": "field",
+            "name": "agent.current_state"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "agent_state",
+            "value": "on_call"
+          }
+        },
+        "for": "45m"
+      },
+      "clear": {
+        "predicate": {
+          "kind": "compare",
+          "left": {
+            "kind": "field",
+            "name": "agent.current_state"
+          },
+          "op": "ne",
+          "right": {
+            "kind": "agent_state",
+            "value": "on_call"
+          }
+        },
+        "for": "0s"
+      },
+      "notifications": {
+        "on_open": true,
+        "on_recovery": true,
+        "audience": "support-operations"
+      }
+    }
+  }
+]

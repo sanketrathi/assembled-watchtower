@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "name": "queue-group",
+  "targets": {
+    "kind": "queue",
+    "ids": ["billing"],
+    "group_ids": [
+      "priority-queues"
+    ]
+  },
+  "trigger": {
+    "predicate": {
+      "kind": "compare",
+      "left": {
+        "kind": "field",
+        "name": "queue.tickets_waiting"
+      },
+      "op": "gt",
+      "right": {
+        "kind": "integer",
+        "value": 10
+      }
+    },
+    "for": "1m"
+  },
+  "clear": {
+    "predicate": {
+      "kind": "compare",
+      "left": {
+        "kind": "field",
+        "name": "queue.tickets_waiting"
+      },
+      "op": "lte",
+      "right": {
+        "kind": "integer",
+        "value": 10
+      }
+    },
+    "for": "0s"
+  },
+  "notifications": {
+    "on_open": false,
+    "on_recovery": true,
+    "audience": "support-operations"
+  }
+}

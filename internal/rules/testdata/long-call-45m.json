@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "name": "long-call-45m",
+  "targets": {
+    "kind": "agent",
+    "ids": [
+      "a_31"
+    ],
+    "group_ids": []
+  },
+  "trigger": {
+    "predicate": {
+      "kind": "compare",
+      "left": {
+        "kind": "field",
+        "name": "agent.current_state"
+      },
+      "op": "eq",
+      "right": {
+        "kind": "agent_state",
+        "value": "on_call"
+      }
+    },
+    "for": "45m"
+  },
+  "clear": {
+    "predicate": {
+      "kind": "compare",
+      "left": {
+        "kind": "field",
+        "name": "agent.current_state"
+      },
+      "op": "ne",
+      "right": {
+        "kind": "agent_state",
+        "value": "on_call"
+      }
+    },
+    "for": "0s"
+  },
+  "notifications": {
+    "on_open": true,
+    "on_recovery": true,
+    "audience": "support-operations"
+  }
+}

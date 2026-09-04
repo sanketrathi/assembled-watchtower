@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "name": "billing-sla",
+  "targets": {"kind": "queue", "ids": ["billing"], "group_ids": []},
+  "trigger": {"predicate": {"kind":"compare", "left":{"kind":"field","name":"queue.longest_wait"}, "op":"gt", "right":{"kind":"field","name":"queue.tickets_waiting"}}, "for":"5m"},
+  "clear": {"predicate": {"kind":"compare", "left":{"kind":"field","name":"queue.longest_wait"}, "op":"lte", "right":{"kind":"field","name":"queue.tickets_waiting"}}, "for":"0s"},
+  "notifications": {"on_open":true,"on_recovery":true,"audience":"support-operations"}
+}
